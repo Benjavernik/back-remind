@@ -1,19 +1,16 @@
-### Crear usuario
-POST http://localhost:3000/api/usuarios
+### Crear recordatorio
+POST http://localhost:3000/recordatorios
 Content-Type: application/json
 
 {
-  "nombre": "Juan p",
-  "email": "juan@example.com"
+  "titulo": "Ir al médico",
+  "detalles": "Llevar estudios",
+  "fecha": "2025-08-06",
+  "hora": "15:30:00"
 }
 
-### Actualizar usuario
-PUT http://localhost:3000/api/usuarios/ID_DEL_USUARIO
-Content-Type: application/json
+### Obtener recordatorios
+GET http://localhost:3000/recordatorios
 
-{
-  "nombre": "Juan Actualizado"
-}
-
-### Eliminar usuario
-DELETE http://localhost:3000/api/usuarios/ID_DEL_USUARIO
+### Eliminar un recordatorio
+DELETE http://localhost:3000/recordatorios/1

@@ -1,11 +1,18 @@
-const express = require("express");
-const app = express();
-const usuariosRoutes = require("./routes/usuarios.router");
+import express from 'express';
+import cors from 'cors';
+import pool from './db.js';  
+import RecordatorioRoutes from "./routes/recordatorios.router.js";
+import UsuarioRoutes from "./routes/usuarios.router.js";
 
+const app = express();
+
+app.use(cors());
 app.use(express.json());
 
-app.use("/api", usuariosRoutes);
+app.use("/recordatorio", RecordatorioRoutes);
+app.use("/usuario", UsuarioRoutes);
 
-app.listen(3000, () => {
-  console.log("Servidor corriendo en puerto 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
