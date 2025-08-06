@@ -3,10 +3,12 @@ POST http://localhost:3000/recordatorios
 Content-Type: application/json
 
 {
-  "titulo": "Ir al médico",
-  "detalles": "Llevar estudios",
+  "id_user": "1",
+  "titulo": "Tomar medicación",
+  "detalles": "Antes de dormir",
   "fecha": "2025-08-06",
-  "hora": "15:30:00"
+  "hora": "22:30",
+  "hecha": false
 }
 
 ### Obtener recordatorios

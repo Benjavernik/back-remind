@@ -5,12 +5,13 @@ export const crearRecordatorio = async (req, res) => {
   try {
     const { titulo, detalles, fecha, hora } = req.body;
     const query = `
-      INSERT INTO public."recordatorios" ("titulo", "detalles", "fecha", "hora")
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO public."recordatorios" ("titulo", "detalles", "fecha", "hora", "hecha")
+      VALUES ($1, $2, $3, $4, false)
       RETURNING *`;
     const values = [titulo, detalles, fecha, hora];
     const result = await pool.query(query, values);
     res.status(201).json(result.rows[0]);
+
   } catch (error) {
     console.error('Error al crear recordatorio:', error);
     res.status(500).json({ error: 'Error al crear recordatorio' });
