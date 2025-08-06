@@ -1,16 +1,19 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
-import pool from './db.js';  
-import RecordatorioRoutes from "./routes/recordatorios.router.js";
-import UsuarioRoutes from "./routes/usuarios.router.js";
+
+import UsuarioRoutes from './routes/usuarios.router.js';
+import RecordatorioRoutes from './routes/recordatorios.router.js';  // <-- importá acá
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/recordatorio", RecordatorioRoutes);
-app.use("/usuario", UsuarioRoutes);
+app.use('/usuario', UsuarioRoutes);
+app.use('/recordatorios', RecordatorioRoutes);   // <-- montá acá
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

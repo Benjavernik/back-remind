@@ -1,4 +1,6 @@
-const crearUsuario = async (datos) => {
+import pool from '../db.js';
+
+export const crearUsuario = async (datos) => {
   const { nombre, email } = datos;
   const query = `INSERT INTO "user" (nombre, email) VALUES ($1, $2) RETURNING *`;
   const values = [nombre, email];
@@ -6,7 +8,7 @@ const crearUsuario = async (datos) => {
   return result.rows[0];
 };
 
-const actualizarUsuario = async (id, nuevosDatos) => {
+export const actualizarUsuario = async (id, nuevosDatos) => {
   const { nombre, email } = nuevosDatos;
   const query = `UPDATE "user" SET nombre = $1, email = $2 WHERE id = $3 RETURNING *`;
   const values = [nombre, email, id];
@@ -14,14 +16,14 @@ const actualizarUsuario = async (id, nuevosDatos) => {
   return result.rows[0];
 };
 
-const eliminarUsuario = async (id) => {
+export const eliminarUsuario = async (id) => {
   const query = `DELETE FROM "user" WHERE id = $1 RETURNING *`;
   const values = [id];
   const result = await pool.query(query, values);
   return result.rows[0];
 };
 
-const obtenerUsuarios = async () => {
+export const obtenerUsuarios = async () => {
   const query = `SELECT * FROM "user"`;
   const result = await pool.query(query);
   return result.rows;

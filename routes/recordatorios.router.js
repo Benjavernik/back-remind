@@ -1,43 +1,10 @@
 import express from 'express';
-import pool from '../db.js';  // Importá pool para hacer consultas
+import * as recordatorioController from '../controllers/recordatorios.controller.js';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  try {
-    const { titulo, detalles, fecha, hora } = req.body;
-    const query = `
-      INSERT INTO recordatorios (titulo, detalles, fecha, hora)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *`;
-    const values = [titulo, detalles, fecha, hora];
-    const result = await pool.query(query, values);
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Error al crear recordatorio:', error);
-    res.status(500).json({ error: 'Error al crear recordatorio' });
-  }
-});
-
-router.get('/', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM recordatorios ORDER BY fecha, hora');
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Error al obtener recordatorios:', error);
-    res.status(500).json({ error: 'Error al obtener recordatorios' });
-  }
-});
-
-router.delete('/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    await pool.query('DELETE FROM recordatorios WHERE id_recordatorio = $1', [id]);
-    res.json({ mensaje: 'Recordatorio eliminado' });
-  } catch (error) {
-    console.error('Error al eliminar recordatorio:', error);
-    res.status(500).json({ error: 'Error al eliminar recordatorio' });
-  }
-});
+router.post('/', recordatorioController.crearRecordatorio);
+router.get('/', recordatorioController.obtenerRecordatorios);
+router.delete('/:id', recordatorioController.eliminarRecordatorio);
 
 export default router;
