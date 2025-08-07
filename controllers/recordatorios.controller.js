@@ -1,14 +1,17 @@
 import pool from '../db.js';
 
-// Crear un nuevo recordatorio
 export const crearRecordatorio = async (req, res) => {
   try {
-    const { titulo, detalles, fecha, hora } = req.body;
+    const { id_user, titulo, detalles, fecha, hora, hecha } = req.body;
+
     const query = `
-      INSERT INTO public."recordatorios" ("titulo", "detalles", "fecha", "hora", "hecha")
-      VALUES ($1, $2, $3, $4, false)
-      RETURNING *`;
-    const values = [titulo, detalles, fecha, hora];
+      INSERT INTO public."recordatorios" 
+      ("id_user", "titulo", "detalles", "fecha", "hora", "hecha")
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *;
+    `;
+
+    const values = [id_user, titulo, detalles, fecha, hora, hecha];
     const result = await pool.query(query, values);
     res.status(201).json(result.rows[0]);
 
@@ -18,7 +21,6 @@ export const crearRecordatorio = async (req, res) => {
   }
 };
 
-// Obtener todos los recordatorios ordenados por fecha y hora
 export const obtenerRecordatorios = async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM recordatorios ORDER BY fecha, hora');
@@ -29,11 +31,10 @@ export const obtenerRecordatorios = async (req, res) => {
   }
 };
 
-// Eliminar un recordatorio por ID
 export const eliminarRecordatorio = async (req, res) => {
   try {
     const id = req.params.id;
-    await pool.query('DELETE FROM recordatorios WHERE id_recordatorio = $1', [id]);
+    await pool.query('DELETE FROM recordatorios WHERE id = $1', [id]);
     res.json({ mensaje: 'Recordatorio eliminado' });
   } catch (error) {
     console.error('Error al eliminar recordatorio:', error);
