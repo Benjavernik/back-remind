@@ -7,11 +7,11 @@ Content-Type: application/json
   "titulo": "Tomar medicación",
   "detalles": "Antes de dormir",
   "fecha": "2025-08-06",
-  "hora": "22:30",
+  "hora": "22:30:00",
   "hecha": false
 }
 
-### Obtener recordatorios
+### Obtener recordatorios 
 GET http://localhost:3000/recordatorios
 
 ### Eliminar un recordatorio
