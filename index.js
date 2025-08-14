@@ -1,12 +1,12 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import pool from './db.js'; 
+import cors from 'cors';
+import pool from './db.js'; // conexión a PostgreSQL
 
 const app = express();
-const PORT = 3000;
+app.use(cors());
+app.use(express.json());
 
-app.use(bodyParser.json());
-
+// GET: obtener recordatorios
 app.get('/recordatorios', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM recordatorios');
@@ -15,7 +15,7 @@ app.get('/recordatorios', async (req, res) => {
       id: r.id,
       id_user: r.id_user || null,
       titulo: r.titulo,
-      detalles: r.detalles,
+      detalles: r.detalles || '',
       fecha: r.fecha ? r.fecha.toISOString().split('T')[0] : null,
       hora: r.hora || null,
       hecha: r.hecha ?? false
@@ -28,20 +28,27 @@ app.get('/recordatorios', async (req, res) => {
   }
 });
 
-
+// POST: crear recordatorio
 app.post('/recordatorios', async (req, res) => {
   try {
     const { id_user, titulo, detalles, fecha, hora, hecha } = req.body;
 
-    const result = await pool.query(
-      `INSERT INTO recordatorios (id_user, titulo, detalles, fecha, hora, hecha)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [id_user, titulo, detalles, fecha, hora, hecha ?? false]
-    );
+    if (!id_user || !titulo || !fecha || !hora) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    }
+
+    const query = `
+      INSERT INTO recordatorios (id_user, titulo, detalles, fecha, hora, hecha)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *;
+    `;
+
+    const values = [id_user, titulo, detalles || '', fecha, hora, hecha ?? false];
+    const result = await pool.query(query, values);
 
     const nuevoRecordatorio = {
       ...result.rows[0],
-      fecha: result.rows[0].fecha.toISOString().split('T')[0]
+      fecha: result.rows[0].fecha ? result.rows[0].fecha.toISOString().split('T')[0] : null
     };
 
     res.status(201).json(nuevoRecordatorio);
@@ -51,10 +58,7 @@ app.post('/recordatorios', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('Servidor funcionando');
-});
-
+const PORT = process.env.PORT || 3001; // cambiar a 3001
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });

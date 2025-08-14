@@ -1,5 +1,5 @@
 ### Crear recordatorio
-POST http://localhost:3000/recordatorios
+POST http://localhost:3001/recordatorios
 Content-Type: application/json
 
 {
@@ -11,8 +11,9 @@ Content-Type: application/json
   "hecha": false
 }
 
+
 ### Obtener recordatorios 
-GET http://localhost:3000/recordatorios
+GET http://localhost:3001/recordatorios
 
 ### Eliminar un recordatorio
-DELETE http://localhost:3000/recordatorios/1
+DELETE http://localhost:3001/recordatorios/1
