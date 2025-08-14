@@ -57,7 +57,6 @@ app.post('/recordatorios', async (req, res) => {
     res.status(500).json({ error: 'Error al crear el recordatorio' });
   }
 });
-
 const PORT = process.env.PORT || 3001; // cambiar a 3001
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
